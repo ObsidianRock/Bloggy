@@ -1,4 +1,9 @@
 venv
 db.sqlite3
 
+blog/migrations
+bloggy/__pycache__/
 .idea
+
+*__pycache__
+*.pyc
