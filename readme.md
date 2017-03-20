@@ -1,0 +1,3 @@
+# Bloggy
+
+Django blogging application
