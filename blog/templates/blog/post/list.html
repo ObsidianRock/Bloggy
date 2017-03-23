@@ -13,6 +13,7 @@
             Published on {{ post.publish }} by {{ post.author }}
          </p>
          {{ post.body|truncatewords:30|linebreaks }}
+    <p class="tags">Tags: {{ post.tags.all|join:", " }}</p>
     {% endfor %}
 
     {% include "pagination.html" with page=page_obj %}
