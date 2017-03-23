@@ -68,7 +68,6 @@ def post_share(request, post_id):
                                                     'sent': sent})
 
 
-
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, slug=post,
                              status='published',
