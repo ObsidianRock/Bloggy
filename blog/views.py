@@ -5,9 +5,10 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
 
 from taggit.models import Tag
+from haystack.query import SearchQuerySet
 
 from .models import Post, Comment
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SearchForm
 
 
 
@@ -55,6 +56,7 @@ def post_list(request, tag_slug=None):
     return render(request, 'blog/post/list.html', {'page': page,
                                                    'posts': posts,
                                                    'tag': tag})
+
 
 def post_share(request, post_id):
     post = get_object_or_404(Post, id=post_id, status='published')
@@ -105,3 +107,30 @@ def post_detail(request, year, month, day, post):
                                                      'comments': comments,
                                                      'comment_form': comment_form,
                                                      'similar_posts': similar_posts})
+
+
+def post_search(request):
+
+    form = SearchForm()
+    if 'query' in request.GET:
+
+        form = SearchForm(request.GET)
+
+        if form.is_valid():
+
+            cd = form.cleaned_data
+            result = SearchQuerySet().models(Post).filter(content=cd['query']).load_all()
+            total_result = result.count()
+
+            return render(request,
+                          'blog/post/search.html',
+                          {'form': form,
+                           'cd': cd,
+                           'result': result,
+                           'total_result': total_result})
+
+    return render(request,
+                  'blog/post/search.html',
+                  {'form': form})
+
+
