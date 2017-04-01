@@ -110,27 +110,19 @@ def post_detail(request, year, month, day, post):
 
 
 def post_search(request):
-
     form = SearchForm()
     if 'query' in request.GET:
-
         form = SearchForm(request.GET)
-
         if form.is_valid():
-
             cd = form.cleaned_data
-            result = SearchQuerySet().models(Post).filter(content=cd['query']).load_all()
-            total_result = result.count()
+            results = SearchQuerySet().models(Post).filter(content=cd['query']).load_all()
+            total_results = results.count()
+            return render(request, 'blog/post/search.html', {'form': form,
+                                                             'cd': cd,
+                                                             'results': results,
+                                                             'total_results': total_results})
 
-            return render(request,
-                          'blog/post/search.html',
-                          {'form': form,
-                           'cd': cd,
-                           'result': result,
-                           'total_result': total_result})
+    return render(request, 'blog/post/search.html', {'form': form})
 
-    return render(request,
-                  'blog/post/search.html',
-                  {'form': form})
 
 
